@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
+import Counter from './redux/Counter';
 
 const style = {marginRight: '10px'}
 class App extends React.Component {
@@ -15,10 +16,12 @@ class App extends React.Component {
 
   handlerAddQuantity = (e) => {
     this.props.addQuantity(this.state.num);
+    this.setState({num: 0});
   }
 
   handlerSubtractQuantity = (e) => {
     this.props.subtractQuantity(this.state.num);
+    this.setState({num: 0});
   }
 
   render() {
@@ -35,6 +38,7 @@ class App extends React.Component {
               <input name='subtract'style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
               <button  onClick={this.handlerSubtractQuantity}> Subtract quantity </button>
             </form>
+            <Counter />
         </div>
     );
  }
@@ -42,7 +46,7 @@ class App extends React.Component {
 
 function mapStateProps(state) {
   return {
-    counter: state.counter
+    counter: state.counter1.counter
   };
 }
 
