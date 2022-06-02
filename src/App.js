@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
+import { addQuantityF, asyncIncreaseF, decreaseF, increaseF, subtractQantityF } from './redux/actions/actions';
 import Counter from './redux/Counter';
 
 const style = {marginRight: '10px'}
@@ -14,13 +15,18 @@ class App extends React.Component {
     e.target.reset();
   }
 
-  handlerAddQuantity = (e) => {
+  handlerAddQuantity = () => {
     this.props.addQuantity(this.state.num);
     this.setState({num: 0});
   }
 
-  handlerSubtractQuantity = (e) => {
+  handlerSubtractQuantity = () => {
     this.props.subtractQuantity(this.state.num);
+    this.setState({num: 0});
+  }
+
+  handleAsyncIncrease = () => {
+    this.props.asyncIncrease(this.state.num);
     this.setState({num: 0});
   }
 
@@ -33,12 +39,17 @@ class App extends React.Component {
             <button onClick={this.props.decrease}> Subtract </button>
             <hr />
             <form onSubmit={this.handlerForm}>
-              <input name='add' style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
+              <input style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
               <button style={style} onClick={this.handlerAddQuantity}> Add quantity </button>
-              <input name='subtract'style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
+              <input style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
               <button  onClick={this.handlerSubtractQuantity}> Subtract quantity </button>
             </form>
             <Counter />
+            <h1>Async thunk middleware {this.props.counter}</h1>
+            <form onSubmit={this.handlerForm}>
+              <input style={style} type='text' onChange={(e) => this.setState({num: e.target.value})}/>
+              <button onClick={this.handleAsyncIncrease}> Async add </button>
+            </form>
         </div>
     );
  }
@@ -52,10 +63,11 @@ function mapStateProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    increase: () =>  dispatch({type: 'counter/increase'}),
-    decrease: () =>  dispatch({type: 'counter/decrease'}),
-    addQuantity: (num) =>  dispatch({type: 'counter/addQuantity', payload: num}),
-    subtractQuantity: (num) =>  dispatch({type: 'counter/subtractQuantity', payload: num})
+    increase: () =>  dispatch(increaseF()),
+    decrease: () =>  dispatch(decreaseF()),
+    addQuantity: (num) =>  dispatch(addQuantityF(num)),
+    subtractQuantity: (num) =>  dispatch(subtractQantityF(num)),
+    asyncIncrease: (num) => dispatch(asyncIncreaseF(num))
   }
 }
 

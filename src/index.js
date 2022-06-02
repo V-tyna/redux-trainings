@@ -5,9 +5,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './redux/rootReducer';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-const store = configureStore({ reducer: rootReducer });
+const loggerMiddleware = store => next => action => next(action);
+
+const store = configureStore({ reducer: rootReducer , middleware: [loggerMiddleware, thunk]});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
